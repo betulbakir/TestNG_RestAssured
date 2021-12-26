@@ -13,13 +13,16 @@ import io.restassured.RestAssured;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.collections.Lists;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
+import org.junit.Assert.*;
 import org.testng.Reporter;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.testng.Assert.assertTrue;
 
 import java.util.jar.*;
 import java.lang.reflect.Array;
@@ -27,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.*;    
+import java.util.*;  
 
 
 
@@ -40,7 +45,7 @@ public class AppTest  {
 		basePath = "http://jsonplaceholder.typicode.com";
 		Reporter.log("Set Up", true);
 
-		// currentTestUser = new User("Janet","Weaver");
+		
 	}
 
 
@@ -51,9 +56,13 @@ public class AppTest  {
         Response response = RestAssured.given().contentType(ContentType.JSON).given().
         when().
                 get(basePath+"/users?username=Samantha");
+      
         
+		
+			
      // TODO: Sonuç bulunamazsa, 0
         // array boyutu 1 ise, devam
+        
         
         response.then().
                 statusCode(200).
@@ -71,7 +80,7 @@ public class AppTest  {
   
     }
 
-	@Test
+	
 	public void userPosts(int userId) {
 		
 		Response response = RestAssured.given().when().get(basePath + "/posts?userId="+userId).then().extract().response();
@@ -102,24 +111,28 @@ public class AppTest  {
 		
 		for(int i=0;i<emailList.size();i++) {
 			
-		//	validateEmail(emailList.get(i).toString());
+			validateEmail(emailList.get(i).toString());
 			
 		}
 	
 		
 	}
 	
-	
-	public boolean validateEmail(String email) {
+	@Test
+	public Boolean validateEmail(String email) {
+
+		System.out.println("E:" + email);
+		String regexPattern = "^(.+)@(\\S+)$";
+		Boolean validate= Pattern.compile(regexPattern)
+			      .matcher(email)
+			      .matches();
+		System.out.println(validate);
+		return validate;
+		 	
+		 
 		
-		
-		return false;
 	}
 
-	private java.util.List<Object> get(String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 }
