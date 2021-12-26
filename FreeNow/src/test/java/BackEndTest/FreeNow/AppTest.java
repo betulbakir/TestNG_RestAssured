@@ -60,8 +60,16 @@ public class AppTest  {
         
 		
 			
-     // TODO: Sonuç bulunamazsa, 0
-        // array boyutu 1 ise, devam
+     // TODO: If no result is found, 0
+        // if array size is 1, continue
+        JsonPath responseJsonFormat = response.jsonPath();
+        
+        String userName = (String) responseJsonFormat.get("userName[0]");
+        
+        if(userName=="")
+        	System.out.println("No one with this name has been found.");
+        
+        else {
         
         
         response.then().
@@ -70,13 +78,14 @@ public class AppTest  {
                 body("username[0]", equalTo("Samantha")).
                 body("name[0]", equalTo("Clementine Bauch")).extract().response();
         
-        JsonPath responseJsonFormat = response.jsonPath();
+    
         
         Integer userId = (int) responseJsonFormat.get("id[0]");
 
         System.out.println("userId: " + userId);
         
-        userPosts(userId);        
+        userPosts(userId);       
+        }
   
     }
 
